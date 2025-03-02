@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,13 +7,7 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -49,9 +42,6 @@ const formSchema = z.object({
     },
     { message: "Amount must be a positive number" }
   ),
-  // transactionType: z.enum(["transfer", "deposit", "withdrawal"], {
-  //   required_error: "Please select a transaction type",
-  // }),
   date: z.date({
     required_error: "Transaction date is required",
   }),
@@ -63,8 +53,6 @@ export default function TransactionForm({
 }: {
   mínar_kontuir: { navn: string; nummar: number }[];
 }) {
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -103,13 +91,7 @@ export default function TransactionForm({
         throw new Error(`Error: ${response.statusText}`);
       }
 
-      console.log("Transaction successful:", await response.json());
-
-      setIsSubmitted(true);
-      setTimeout(() => {
-        setIsSubmitted(false);
-        form.reset();
-      }, 3000);
+      form.reset();
     } catch (error) {
       console.error("Transaction failed:", error);
     }
