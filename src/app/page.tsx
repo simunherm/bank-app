@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { useRouter } from "next/navigation";
-import { Wallet, SquareUser } from "lucide-react";
+
+import { Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,32 +16,48 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const formSchema = z.object({
+  ptal: z.string().length(9, { message: "Ptal má vera 9 siffur" }),
+});
 
 export default function SignIn() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      ptal: "",
+    },
+  });
+
   const router = useRouter();
-  const [ptal, setPtal] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      if (!ptal) {
-        throw new Error("Please enter both ptal and password");
+      const response = await fetch(
+        "https://apex.oracle.com/pls/apex/karij12/api/rita_inn",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ptal: values.ptal }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(JSON.stringify(response.body));
       }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      console.log("Login successful:", { ptal });
-      router.push("/kundi/" + ptal);
-    } catch (err: any) {
-      setError(err.message || "An error occurred during sign in");
-    } finally {
-      setIsLoading(false);
+      form.reset();
+      router.push("kundi/" + values.ptal);
+    } catch (error) {
+      console.error("Inritan virkaði ikki:", error);
     }
   };
 
@@ -47,7 +67,7 @@ export default function SignIn() {
         <div className="flex justify-center mb-8">
           <div className="flex items-center">
             <Wallet className="h-10 w-10 text-primary" />
-            <span className="ml-2 text-2xl font-bold">NextBank</span>
+            <span className="ml-2 text-2xl font-bold">Banki</span>
           </div>
         </div>
 
@@ -61,33 +81,30 @@ export default function SignIn() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <div className="p-3 rounded-md bg-red-50 text-red-600 text-sm">
-                  {error}
-                </div>
-              )}
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="ptal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ptal</FormLabel>
+                      <FormControl>
+                        <Input placeholder="DDMMYYXXX" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <div className="space-y-2">
-                <Label htmlFor="ptal">ptal</Label>
-                <div className="relative">
-                  <SquareUser className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-                  <Input
-                    id="ptal"
-                    type="ptal"
-                    placeholder="DDMMYYXXX"
-                    className="pl-10"
-                    value={ptal}
-                    onChange={(e) => setPtal(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "arbeiðir..." : "rita inn"}
-              </Button>
-            </form>
+                <Button type="submit" className="w-full">
+                  rita inn
+                </Button>
+              </form>
+            </Form>
           </CardContent>
         </Card>
       </div>
