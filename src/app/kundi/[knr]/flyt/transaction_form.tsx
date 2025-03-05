@@ -31,6 +31,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { Kontu } from "./page";
 
 const formSchema = z.object({
   avKontu: z.string().min(1, { message: "From account is required" }),
@@ -49,9 +50,9 @@ const formSchema = z.object({
 });
 
 export default function TransactionForm({
-  mínar_kontuir,
+  frá_kontuir,
 }: {
-  mínar_kontuir: { navn: string; nummar: number }[];
+  frá_kontuir: Kontu[];
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -162,12 +163,12 @@ export default function TransactionForm({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {mínar_kontuir.map((kontu) => (
+                          {frá_kontuir.map((kontu) => (
                             <SelectItem
                               key={kontu.nummar}
                               value={`${kontu.nummar}`}
                             >
-                              {kontu.navn} - {kontu.nummar}
+                              {kontu.eigari} - {kontu.navn} - {kontu.nummar}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -182,7 +183,7 @@ export default function TransactionForm({
                   name="ákontu"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>To Account</FormLabel>
+                      <FormLabel>Á kontu</FormLabel>
                       <FormControl>
                         <Input placeholder="Kontu nummar" {...field} />
                       </FormControl>
