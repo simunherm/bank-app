@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Kontu } from "./page";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   avKontu: z.string().min(1, { message: "From account is required" }),
@@ -51,8 +52,10 @@ const formSchema = z.object({
 
 export default function TransactionForm({
   frá_kontuir,
+  kunda_nr,
 }: {
   frá_kontuir: Kontu[];
+  kunda_nr: string;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,6 +67,7 @@ export default function TransactionForm({
       date: new Date(),
     },
   });
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const formattedDate = format(values.date, "dd/MM/yyyy");
@@ -93,6 +97,7 @@ export default function TransactionForm({
       }
 
       form.reset();
+      router.push("/kundi/" + kunda_nr);
     } catch (error) {
       console.error("Transaction failed:", error);
     }

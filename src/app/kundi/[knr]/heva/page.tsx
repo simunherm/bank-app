@@ -1,6 +1,6 @@
 import React from "react";
-import TransactionForm from "./transaction_form";
 import { Item, RF_Kontu } from "../page";
+import HevaForm from "./form";
 
 export type Kontu = {
   eigari: string;
@@ -8,7 +8,7 @@ export type Kontu = {
   nummar: string;
 };
 
-const Flyt = async ({ params }: { params: Promise<{ knr: string }> }) => {
+const heva = async ({ params }: { params: Promise<{ knr: string }> }) => {
   const knr = (await params).knr;
   const mínar_kontuir: Item[] = (
     await (
@@ -40,15 +40,13 @@ const Flyt = async ({ params }: { params: Promise<{ knr: string }> }) => {
         nummar: kontunummar,
       }))
     );
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-24">
-      <div className="w-full max-w-3xl">
-        <h1 className="mb-6 text-3xl font-bold tracking-tight">Flyting</h1>
-        <TransactionForm frá_kontuir={kontoir} kunda_nr={knr} />
+    <main className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <HevaForm frá_kontuir={kontoir} kunda_nr={knr} />
       </div>
     </main>
   );
 };
 
-export default Flyt;
+export default heva;

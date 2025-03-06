@@ -106,6 +106,14 @@ export default async function BankAccountPage({
           Stovna Kontu
         </Button>
       </Link>
+      <Link href={`${knr}/heva`}>
+        <Button
+          className="w-full h-20 text-2xl font-bold mb-3 rounded"
+          variant="default"
+        >
+          Heva / Set inn
+        </Button>
+      </Link>
       <Kontu_yvirlit mínar_kontuir={kontuir} femandar_kontuir={fk} />
     </div>
   );
