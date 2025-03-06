@@ -13,6 +13,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,6 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Link from "next/link";
 
 const formSchema = z.object({
   ptal: z.string().length(9, { message: "Ptal má vera 9 siffur" }),
@@ -54,8 +56,9 @@ export default function SignIn() {
       if (!response.ok) {
         throw new Error(JSON.stringify(response.body));
       }
+      const kunda_nr = (await response.json()).kunda_nr;
       form.reset();
-      router.push("kundi/" + values.ptal);
+      router.push("kundi/" + kunda_nr);
     } catch (error) {
       console.error("Inritan virkaði ikki:", error);
     }
@@ -106,6 +109,13 @@ export default function SignIn() {
               </form>
             </Form>
           </CardContent>
+          <CardFooter className="flex flex-col">
+            <Link href="/stovna_kunda">
+              <Button variant="ghost" className="w-full">
+                Stovna Kunda
+              </Button>
+            </Link>
+          </CardFooter>
         </Card>
       </div>
     </main>

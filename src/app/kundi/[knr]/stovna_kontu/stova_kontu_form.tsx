@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { kontu_slag } from "./page";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   kontu_navn: z.string().min(1, { message: "kontu_navn er kravt" }),
@@ -42,6 +43,7 @@ export default function StovnaKontuForm({
       kontu_typa: "",
     },
   });
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const body = {
@@ -68,6 +70,7 @@ export default function StovnaKontuForm({
       }
 
       form.reset();
+      router.push("/kundi/" + eigari);
     } catch (error) {
       console.error("Transaction failed:", error);
     }
