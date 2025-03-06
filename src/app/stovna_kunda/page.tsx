@@ -11,9 +11,11 @@ const SignupPage = async () => {
     ).json()
   ).items;
   return (
-    <div>
-      <SignupForm post_nr={postnummur} />{" "}
-    </div>
+    <main className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <SignupForm post_nr={postnummur} />{" "}
+      </div>
+    </main>
   );
 };
 

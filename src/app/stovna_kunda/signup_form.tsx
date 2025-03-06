@@ -4,7 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -22,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { isPtalValid } from "@/lib/utils";
+import Link from "next/link";
 
 const formSchema = z
   .object({
@@ -103,7 +110,7 @@ export default function SignupForm({
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Stovna kunda</CardTitle>
+          <CardTitle>Stovna Kunda</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -237,6 +244,11 @@ export default function SignupForm({
             </form>
           </Form>
         </CardContent>
+        <CardFooter className="flex flex-col">
+          <Link href="/">
+            <Button variant="ghost">Rita inn</Button>
+          </Link>
+        </CardFooter>
       </Card>
     </>
   );
