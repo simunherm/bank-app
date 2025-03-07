@@ -81,12 +81,14 @@ export default async function BankAccountPage({
     })
   );
 
-  const fk: Kontu[] = rf_kontuir.map(({ kontunummar, kontunavn, saldo }) => ({
-    eigari: fornavn,
-    nummar: kontunummar,
-    navn: kontunavn,
-    saldo: saldo,
-  }));
+  const fk: Kontu[] = rf_kontuir.map(
+    ({ kontunummar, kontunavn, saldo, fornavn, eftirnavn }) => ({
+      eigari: `${fornavn} ${eftirnavn}`,
+      nummar: kontunummar,
+      navn: kontunavn,
+      saldo: saldo,
+    })
+  );
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
       <h1 className="text-3xl font-bold mb-6">Hey {fornavn}</h1>
